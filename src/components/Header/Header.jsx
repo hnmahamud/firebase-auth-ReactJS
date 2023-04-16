@@ -6,6 +6,7 @@ import { useToasterStore } from "react-hot-toast";
 const Header = () => {
   const { user, logOut } = useContext(AuthContext);
 
+  // Logout
   const handleLogout = () => {
     logOut()
       .then(() => {

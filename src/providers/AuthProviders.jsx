@@ -16,13 +16,78 @@ import {
 } from "firebase/auth";
 import app from "../firebase/firebase.config";
 
+// Context api
 export const AuthContext = createContext(null);
+
+// Firebase auth
 const auth = getAuth(app);
 
 const AuthProviders = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Create user with email password
+  const createUser = (email, password) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  // Send verification email
+  const sendVerificationEmail = (user) => {
+    return sendEmailVerification(user);
+  };
+
+  // Update profile data when user create account
+  const profileUpdate = (name) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+    });
+  };
+
+  // Update profile data
+  const updateAuthData = (updateName, updatePhoto) => {
+    setUser({ ...user, displayName: updateName, photoURL: updatePhoto });
+  };
+
+  // SignIn with email password
+  const signIn = (email, password) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  // SignIn with google
+  const googleSignIn = () => {
+    const googleProvider = new GoogleAuthProvider();
+    return signInWithPopup(auth, googleProvider);
+  };
+
+  // SignIn with github
+  const githubSignIn = () => {
+    const githubProvider = new GithubAuthProvider();
+    return signInWithPopup(auth, githubProvider);
+  };
+
+  // SignIn with twitter
+  const twitterSignIn = () => {
+    const twitterProvider = new TwitterAuthProvider();
+    return signInWithPopup(auth, twitterProvider);
+  };
+
+  // SignIn with facebook
+  const facebookSignIn = () => {
+    const facebookProvider = new FacebookAuthProvider();
+    return signInWithPopup(auth, facebookProvider);
+  };
+
+  // Password reset
+  const passwordReset = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
+  // Logout
+  const logOut = () => {
+    return signOut(auth);
+  };
+
+  // onAuthStateChanged for hold login user data
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -34,61 +99,9 @@ const AuthProviders = ({ children }) => {
     };
   }, []);
 
-  const createUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
-  };
-
-  const sendVerificationEmail = (user) => {
-    return sendEmailVerification(user);
-  };
-
-  const profileUpdate = (name, photo) => {
-    return updateProfile(auth.currentUser, {
-      displayName: name,
-      photoURL: photo,
-    });
-  };
-
-  const updateAuthData = () => {
-    const updateUser = auth.currentUser;
-    console.log(updateUser);
-    setUser(updateUser);
-  };
-
-  const signIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  };
-
-  const googleSignIn = () => {
-    const googleProvider = new GoogleAuthProvider();
-    return signInWithPopup(auth, googleProvider);
-  };
-
-  const githubSignIn = () => {
-    const githubProvider = new GithubAuthProvider();
-    return signInWithPopup(auth, githubProvider);
-  };
-
-  const twitterSignIn = () => {
-    const twitterProvider = new TwitterAuthProvider();
-    return signInWithPopup(auth, twitterProvider);
-  };
-
-  const facebookSignIn = () => {
-    const facebookProvider = new FacebookAuthProvider();
-    return signInWithPopup(auth, facebookProvider);
-  };
-
-  const passwordReset = (email) => {
-    return sendPasswordResetEmail(auth, email);
-  };
-
-  const logOut = () => {
-    return signOut(auth);
-  };
-
   const authInfo = {
     user,
+    setUser,
     updateAuthData,
     loading,
     createUser,
@@ -104,6 +117,7 @@ const AuthProviders = ({ children }) => {
   };
 
   return (
+    // Send data to all using context api
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };

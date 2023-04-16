@@ -6,6 +6,7 @@ import { AuthContext } from "../providers/AuthProviders";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 const Root = () => {
+  // Use context api
   const { loading } = useContext(AuthContext);
 
   if (loading) {

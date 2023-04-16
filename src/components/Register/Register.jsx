@@ -5,6 +5,7 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { AuthContext } from "../../providers/AuthProviders";
 
 const Register = () => {
+  // Use context api
   const { user, createUser, sendVerificationEmail, profileUpdate } =
     useContext(AuthContext);
 
@@ -44,7 +45,6 @@ const Register = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
 
         // Send verification email
         sendVerificationEmail(user).then(() => {
@@ -60,8 +60,6 @@ const Register = () => {
             setIsBtnLoading(false);
             setIsNotChecked(true);
             event.target.reset();
-
-            console.log("Profile update successfully.");
           })
           .catch((error) => {
             setIsRedirect(true);
@@ -201,6 +199,7 @@ const Register = () => {
                 </div>
               </div>
 
+              {/* Button loading or normal */}
               {isBtnLoading ? (
                 <div className="text-center">
                   <div role="status">

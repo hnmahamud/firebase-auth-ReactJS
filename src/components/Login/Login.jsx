@@ -9,6 +9,7 @@ import twitter from "../../assets/twitter.png";
 import { AuthContext } from "../../providers/AuthProviders";
 
 const Login = () => {
+  // Use context api
   const {
     user,
     signIn,
@@ -23,6 +24,7 @@ const Login = () => {
   const [err, setErr] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
+  // Use ref for directly access some element and their value
   const emailRef = useRef();
 
   // Login with email password
@@ -292,6 +294,7 @@ const Login = () => {
                 </Link>
               </div>
 
+              {/* Button loading or normal */}
               {isBtnLoading ? (
                 <div className="text-center">
                   <div role="status">

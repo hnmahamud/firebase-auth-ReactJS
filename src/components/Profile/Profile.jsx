@@ -3,14 +3,12 @@ import { AuthContext } from "../../providers/AuthProviders";
 import { toast } from "react-hot-toast";
 
 const Profile = () => {
+  // Use context api
   const { user, updateAuthData, profileUpdate } = useContext(AuthContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [name, setName] = useState(user?.displayName);
-  const [email, setEmail] = useState(user?.email);
-  const [photo, setPhoto] = useState(user?.photoURL);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
-  // console.log(user);
 
+  // Update profile data
   const handleModal = (event) => {
     event.preventDefault();
     setIsBtnLoading(true);
@@ -20,9 +18,7 @@ const Profile = () => {
     profileUpdate(updateName, updatePhoto)
       .then(() => {
         toast.success("Profile update Successfully!");
-        // updateAuthData();
-        setName(updateName);
-        setPhoto(updatePhoto);
+        updateAuthData(updateName, updatePhoto);
         setModalIsOpen(false);
         setIsBtnLoading(false);
       })
@@ -36,12 +32,13 @@ const Profile = () => {
   return (
     <div className="flex justify-center items-center mt-8">
       <div className="card card-compact w-96 bg-base-100 shadow rounded-md">
+        {/* Card */}
         <figure>
-          <img src={photo} alt="Picture" />
+          <img src={user?.photoURL} alt="Picture" />
         </figure>
         <div className="card-body">
-          <h2 className="card-title">{name}</h2>
-          <p>{email}</p>
+          <h2 className="card-title">{user?.displayName}</h2>
+          <p>{user?.email}</p>
           <div className="card-actions justify-end">
             {/* The button to open modal */}
             <button
@@ -53,7 +50,7 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Put this part before </body> tag */}
+        {/* Modal for update profile data */}
         <input
           checked={modalIsOpen}
           onChange={() => {}}
@@ -90,6 +87,7 @@ const Profile = () => {
                 />
               </div>
               <div className="form-control mt-6">
+                {/* Button loading or normal */}
                 {isBtnLoading ? (
                   <div className="text-center">
                     <div role="status">
