@@ -1,10 +1,16 @@
 import React, { createContext, useEffect, useState } from "react";
 import {
+  FacebookAuthProvider,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  TwitterAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
@@ -46,6 +52,30 @@ const AuthProviders = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  const googleSignIn = () => {
+    const googleProvider = new GoogleAuthProvider();
+    return signInWithPopup(auth, googleProvider);
+  };
+
+  const githubSignIn = () => {
+    const githubProvider = new GithubAuthProvider();
+    return signInWithPopup(auth, githubProvider);
+  };
+
+  const twitterSignIn = () => {
+    const twitterProvider = new TwitterAuthProvider();
+    return signInWithPopup(auth, twitterProvider);
+  };
+
+  const facebookSignIn = () => {
+    const facebookProvider = new FacebookAuthProvider();
+    return signInWithPopup(auth, facebookProvider);
+  };
+
+  const passwordReset = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
   const logOut = () => {
     return signOut(auth);
   };
@@ -57,6 +87,11 @@ const AuthProviders = ({ children }) => {
     sendVerificationEmail,
     profileUpdate,
     signIn,
+    googleSignIn,
+    githubSignIn,
+    twitterSignIn,
+    facebookSignIn,
+    passwordReset,
     logOut,
   };
 
