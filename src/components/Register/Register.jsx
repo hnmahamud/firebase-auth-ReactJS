@@ -1,21 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  sendEmailVerification,
-  updateProfile,
-} from "firebase/auth";
-import app from "../../firebase/firebase.config";
 import { toast } from "react-hot-toast";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { AuthContext } from "../../providers/AuthProviders";
 
 const Register = () => {
+  const { createUser, sendVerificationEmail, profileUpdate } =
+    useContext(AuthContext);
+
   const [err, setErr] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isNotChecked, setIsNotChecked] = useState(true);
-
-  const auth = getAuth(app);
 
   // Registration with email password
   const submitRegHandler = (event) => {
@@ -42,7 +37,7 @@ const Register = () => {
       return;
     }
 
-    createUserWithEmailAndPassword(auth, email, password)
+    createUser(email, password)
       .then((userCredential) => {
         // Signed in
         toast.success("Successfully registered!");
@@ -52,14 +47,12 @@ const Register = () => {
         console.log(user);
 
         // Send verification email
-        sendEmailVerification(user).then(() => {
+        sendVerificationEmail(user).then(() => {
           toast.success("Verification email has been sent.");
         });
 
         // Update user profile
-        updateProfile(auth.currentUser, {
-          displayName: name,
-        })
+        profileUpdate(name)
           .then(() => {
             console.log("Profile update successfully.");
           })
@@ -68,12 +61,10 @@ const Register = () => {
           });
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        const errForToast = errorMessage.split(":");
-        setErr(errForToast[1]);
+        const errForMsg = errorMessage.split(":");
+        setErr(errForMsg[1]);
         console.log(`Error Message: ${errorMessage}`);
-        console.log(`Error Code: ${errorCode}`);
       });
   };
 

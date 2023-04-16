@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FacebookAuthProvider,
@@ -18,8 +18,11 @@ import facebook from "../../assets/facebook.png";
 import github from "../../assets/github.png";
 import google from "../../assets/google.png";
 import twitter from "../../assets/twitter.png";
+import { AuthContext } from "../../providers/AuthProviders";
 
 const Login = () => {
+  const { signIn } = useContext(AuthContext);
+
   const auth = getAuth(app);
   const [err, setErr] = useState("");
   const [isVisible, setIsVisible] = useState(false);
@@ -49,7 +52,7 @@ const Login = () => {
       return;
     }
 
-    signInWithEmailAndPassword(auth, email, password)
+    signIn(email, password)
       .then((userCredential) => {
         // Signed in
         setErr("");
@@ -59,12 +62,10 @@ const Login = () => {
         console.log(user);
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        const errForToast = errorMessage.split(":");
-        setErr(errForToast[1]);
+        const errForMsg = errorMessage.split(":");
+        setErr(errForMsg[1]);
         console.log(`Error Message: ${errorMessage}`);
-        console.log(`Error Code: ${errorCode}`);
       });
   };
 

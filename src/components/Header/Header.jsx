@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../providers/AuthProviders";
+import { useToasterStore } from "react-hot-toast";
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        useToasterStore.success("Logout Successfully!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="bg-base-200">
       <div className="md:w-[80%] md:mx-auto navbar">
@@ -25,7 +39,7 @@ const Header = () => {
             </label>
             <ul
               tabIndex={0}
-              className="flex flex-col gap-4 text-subTitle dropdown-content mt-3 p-2 shadow bg-base-200 w-52"
+              className="flex flex-col gap-4 text-subTitle menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-200"
             >
               <li>
                 <NavLink
@@ -37,6 +51,57 @@ const Header = () => {
                   Home
                 </NavLink>
               </li>
+              {!user ? (
+                <li>
+                  <NavLink
+                    to="/login"
+                    className={({ isActive }) =>
+                      isActive ? "text-blue-500" : ""
+                    }
+                  >
+                    Login
+                  </NavLink>
+                </li>
+              ) : (
+                ""
+              )}
+
+              {user ? (
+                <li tabIndex={0}>
+                  <label tabIndex={0} className="avatar">
+                    <div className="w-10 rounded-full">
+                      <img src={user?.photoURL} />
+                    </div>
+                  </label>
+                  <ul className="bg-base-200">
+                    <li>
+                      <Link to="/profile">Profile</Link>
+                    </li>
+                    <li>
+                      <Link onClick={handleLogout}>Logout</Link>
+                    </li>
+                  </ul>
+                </li>
+              ) : (
+                ""
+              )}
+            </ul>
+          </div>
+          <Link to="/">
+            <h3 className="text-gray-600 text-3xl font-extrabold">Auth</h3>
+          </Link>
+        </div>
+        <div className="navbar-end hidden lg:flex">
+          <ul className="text-subTitle flex items-center gap-8">
+            <li>
+              <NavLink
+                to="/"
+                className={({ isActive }) => (isActive ? "text-blue-500" : "")}
+              >
+                Home
+              </NavLink>
+            </li>
+            {!user ? (
               <li>
                 <NavLink
                   to="/login"
@@ -47,48 +112,37 @@ const Header = () => {
                   Login
                 </NavLink>
               </li>
+            ) : (
+              ""
+            )}
+
+            {user ? (
               <li>
-                <NavLink
-                  to="/register"
-                  className={({ isActive }) =>
-                    isActive ? "text-blue-500" : ""
-                  }
-                >
-                  Register
-                </NavLink>
+                <div className="dropdown dropdown-end">
+                  <label
+                    tabIndex={0}
+                    className="btn btn-ghost btn-circle avatar"
+                  >
+                    <div className="w-10 rounded-full">
+                      <img src={user?.photoURL} />
+                    </div>
+                  </label>
+                  <ul
+                    tabIndex={0}
+                    className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 w-52"
+                  >
+                    <li>
+                      <Link to="/profile">Profile</Link>
+                    </li>
+                    <li>
+                      <Link onClick={handleLogout}>Logout</Link>
+                    </li>
+                  </ul>
+                </div>
               </li>
-            </ul>
-          </div>
-          <Link to="/">
-            <h3 className="text-gray-600 text-3xl font-extrabold">Auth</h3>
-          </Link>
-        </div>
-        <div className="navbar-end hidden lg:flex">
-          <ul className="text-subTitle flex gap-8">
-            <li>
-              <NavLink
-                to="/"
-                className={({ isActive }) => (isActive ? "text-blue-500" : "")}
-              >
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/login"
-                className={({ isActive }) => (isActive ? "text-blue-500" : "")}
-              >
-                Login
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/register"
-                className={({ isActive }) => (isActive ? "text-blue-500" : "")}
-              >
-                Register
-              </NavLink>
-            </li>
+            ) : (
+              ""
+            )}
           </ul>
         </div>
       </div>
