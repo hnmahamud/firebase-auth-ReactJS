@@ -42,10 +42,17 @@ const AuthProviders = ({ children }) => {
     return sendEmailVerification(user);
   };
 
-  const profileUpdate = (name) => {
+  const profileUpdate = (name, photo) => {
     return updateProfile(auth.currentUser, {
       displayName: name,
+      photoURL: photo,
     });
+  };
+
+  const updateAuthData = () => {
+    const updateUser = auth.currentUser;
+    console.log(updateUser);
+    setUser(updateUser);
   };
 
   const signIn = (email, password) => {
@@ -82,6 +89,7 @@ const AuthProviders = ({ children }) => {
 
   const authInfo = {
     user,
+    updateAuthData,
     loading,
     createUser,
     sendVerificationEmail,
