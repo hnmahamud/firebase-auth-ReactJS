@@ -26,18 +26,22 @@ const Register = () => {
     // Validation with Regex
     if (password.length < 6) {
       setErr("Your password should be at least 6 character long.");
+      setIsBtnLoading(false);
       return;
     }
     if (!/(?=.*[!@#$%^&*])/.test(password)) {
       setErr("Your password should be at least one special character.");
+      setIsBtnLoading(false);
       return;
     } else if (!/(?=.*[A-Z])(?=.*[a-z])/.test(password)) {
       setErr(
         "Your password should be at least one upper and lower case letter."
       );
+      setIsBtnLoading(false);
       return;
     } else if (!/(?=.*\d)/.test(password)) {
       setErr("Your password should be at least one digit.");
+      setIsBtnLoading(false);
       return;
     }
 
