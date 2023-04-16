@@ -65,6 +65,7 @@ const Login = () => {
         const errForMsg = errorMessage.split(":");
         setErr(errForMsg[1]);
         console.log(`Error Message: ${errorMessage}`);
+        setIsBtnLoading(false);
       });
   };
 
