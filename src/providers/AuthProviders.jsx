@@ -37,14 +37,15 @@ const AuthProviders = ({ children }) => {
     return sendEmailVerification(user);
   };
 
-  // Update profile data when user create account
-  const profileUpdate = (name) => {
+  // Update profile data in firebase
+  const profileUpdate = (updateName, updatePhoto) => {
     return updateProfile(auth.currentUser, {
-      displayName: name,
+      displayName: updateName,
+      photoURL: updatePhoto,
     });
   };
 
-  // Update profile data
+  // Update profile data in local state
   const updateAuthData = (updateName, updatePhoto) => {
     setUser({ ...user, displayName: updateName, photoURL: updatePhoto });
   };

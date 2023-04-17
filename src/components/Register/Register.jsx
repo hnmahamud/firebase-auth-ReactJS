@@ -55,7 +55,7 @@ const Register = () => {
         });
 
         // Update user profile
-        profileUpdate(name)
+        profileUpdate(name, null)
           .then(() => {
             setIsNotChecked(true);
             event.target.reset();
