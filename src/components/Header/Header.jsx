@@ -2,9 +2,14 @@ import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProviders";
 import { useToasterStore } from "react-hot-toast";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const Header = () => {
-  const { user, logOut } = useContext(AuthContext);
+  const { user, logOut, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
 
   // Logout
   const handleLogout = () => {
