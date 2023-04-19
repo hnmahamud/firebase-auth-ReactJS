@@ -9,8 +9,8 @@ const Profile = () => {
   // State
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
-  const [name, setName] = useState(user?.displayName);
-  const [photoUrl, setPhotoUrl] = useState(user?.photoURL);
+  const [name, setName] = useState(user?.displayName || "");
+  const [photoUrl, setPhotoUrl] = useState(user?.photoURL || "");
 
   // Submit updated profile data
   const submitUpdatedData = (event) => {
@@ -35,8 +35,8 @@ const Profile = () => {
 
   // Edit profile data
   const editProfileData = () => {
-    setName(user?.displayName);
-    setPhotoUrl(user?.photoURL);
+    setName(user?.displayName || "");
+    setPhotoUrl(user?.photoURL || "");
     setModalIsOpen(true);
   };
 

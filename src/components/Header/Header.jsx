@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProviders";
-import { useToasterStore } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const Header = () => {
@@ -15,7 +15,7 @@ const Header = () => {
   const handleLogout = () => {
     logOut()
       .then(() => {
-        useToasterStore.success("Logout Successfully!");
+        toast.success("Logout Successfully!");
       })
       .catch((error) => {
         console.log(error);

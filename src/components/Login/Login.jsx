@@ -32,6 +32,7 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/";
 
   // Email Validation with Regex
+  // uncontrolled component => controlled component
   const emailValidation = (event) => {
     const email = event.target.value;
 
@@ -54,6 +55,7 @@ const Login = () => {
   };
 
   // Password Validation with Regex
+  // uncontrolled component => controlled component
   const passwordValidation = (event) => {
     const password = event.target.value;
 
@@ -95,7 +97,6 @@ const Login = () => {
         toast.success("Login Successfully!");
         event.target.reset();
         const user = userCredential.user;
-        console.log(user);
         navigate(from, { replace: true });
         setLoading(false);
       })
@@ -368,6 +369,7 @@ const Login = () => {
                 Don’t have an account yet?{" "}
                 <Link
                   to="/register"
+                  state={from}
                   className="font-medium text-primary-600 hover:underline"
                 >
                   Sign up

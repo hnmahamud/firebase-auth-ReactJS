@@ -1,16 +1,18 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { AuthContext } from "../../providers/AuthProviders";
 
 const Register = () => {
   // Use context api
-  const { createUser, sendVerificationEmail, profileUpdate } =
+  const { createUser, sendVerificationEmail, profileUpdate, setLoading } =
     useContext(AuthContext);
 
-  // Navigate
+  // Use location and navigate for get the pathname where user wanted to go.
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state || "/";
 
   // State
   const [err, setErr] = useState("");
@@ -18,6 +20,7 @@ const Register = () => {
   const [isNotChecked, setIsNotChecked] = useState(true);
 
   // Email Validation with Regex
+  // uncontrolled component => controlled component
   const emailValidation = (event) => {
     const email = event.target.value;
 
@@ -40,6 +43,7 @@ const Register = () => {
   };
 
   // Password Validation with Regex
+  // uncontrolled component => controlled component
   const passwordValidation = (event) => {
     const password = event.target.value;
 
@@ -80,8 +84,23 @@ const Register = () => {
         // Signed in
         const user = userCredential.user;
 
-        navigate("/", { replace: true });
-        setLoading(false);
+        // Update user profile
+        profileUpdate(name, null)
+          .then(() => {
+            // Navigate to our destination
+            navigate(from, { replace: true });
+            setLoading(false);
+            setIsNotChecked(true);
+            event.target.reset();
+          })
+          .catch((error) => {
+            // Navigate to our destination
+            navigate(from, { replace: true });
+            setLoading(false);
+            setIsNotChecked(true);
+            event.target.reset();
+            console.log(error);
+          });
 
         // Send verification email
         sendVerificationEmail(user).then(() => {
@@ -89,18 +108,6 @@ const Register = () => {
             "Successfully registered! And verification email has been sent."
           );
         });
-
-        // Update user profile
-        profileUpdate(name, null)
-          .then(() => {
-            setIsNotChecked(true);
-            event.target.reset();
-          })
-          .catch((error) => {
-            setIsNotChecked(true);
-            event.target.reset();
-            console.log(error);
-          });
       })
       .catch((error) => {
         const errorMessage = error.message;
