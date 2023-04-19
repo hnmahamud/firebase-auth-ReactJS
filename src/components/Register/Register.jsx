@@ -9,11 +9,64 @@ const Register = () => {
   const { createUser, sendVerificationEmail, profileUpdate } =
     useContext(AuthContext);
 
+  // Navigate
   const navigate = useNavigate();
 
+  // State
   const [err, setErr] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isNotChecked, setIsNotChecked] = useState(true);
+
+  // Email Validation with Regex
+  const emailValidation = (event) => {
+    const email = event.target.value;
+
+    if (email.length > 0) {
+      if (
+        !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+          email
+        )
+      ) {
+        setErr("Please provide a valid email");
+        return;
+      } else {
+        setErr("");
+        return;
+      }
+    } else {
+      setErr("");
+      return;
+    }
+  };
+
+  // Password Validation with Regex
+  const passwordValidation = (event) => {
+    const password = event.target.value;
+
+    if (password.length > 0) {
+      if (password.length < 6) {
+        setErr("Your password should be at least 6 character long.");
+        return;
+      } else if (!/(?=.*[!@#$%^&*])/.test(password)) {
+        setErr("Your password should be at least one special character.");
+        return;
+      } else if (!/(?=.*[A-Z])(?=.*[a-z])/.test(password)) {
+        setErr(
+          "Your password should be at least one upper and lower case letter."
+        );
+        return;
+      } else if (!/(?=.*\d)/.test(password)) {
+        setErr("Your password should be at least one digit.");
+        return;
+      } else {
+        setErr("");
+        return;
+      }
+    } else {
+      setErr("");
+      return;
+    }
+  };
 
   // Registration with email password
   const submitRegHandler = (event) => {
@@ -21,24 +74,6 @@ const Register = () => {
     const email = event.target.email.value;
     const password = event.target.password.value;
     const name = event.target.name.value;
-
-    // Validation with Regex
-    if (password.length < 6) {
-      setErr("Your password should be at least 6 character long.");
-      return;
-    }
-    if (!/(?=.*[!@#$%^&*])/.test(password)) {
-      setErr("Your password should be at least one special character.");
-      return;
-    } else if (!/(?=.*[A-Z])(?=.*[a-z])/.test(password)) {
-      setErr(
-        "Your password should be at least one upper and lower case letter."
-      );
-      return;
-    } else if (!/(?=.*\d)/.test(password)) {
-      setErr("Your password should be at least one digit.");
-      return;
-    }
 
     createUser(email, password)
       .then((userCredential) => {
@@ -137,6 +172,7 @@ const Register = () => {
                 </label>
                 <input
                   type="email"
+                  onChange={emailValidation}
                   name="email"
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
@@ -154,6 +190,7 @@ const Register = () => {
                 <div className="bg-gray-50 flex border border-gray-300 rounded-lg">
                   <input
                     type={isVisible ? "text" : "password"}
+                    onChange={passwordValidation}
                     name="password"
                     id="password"
                     placeholder="••••••••"

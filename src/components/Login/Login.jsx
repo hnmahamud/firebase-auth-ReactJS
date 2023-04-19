@@ -31,29 +31,62 @@ const Login = () => {
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
 
+  // Email Validation with Regex
+  const emailValidation = (event) => {
+    const email = event.target.value;
+
+    if (email.length > 0) {
+      if (
+        !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+          email
+        )
+      ) {
+        setErr("Please provide a valid email");
+        return;
+      } else {
+        setErr("");
+        return;
+      }
+    } else {
+      setErr("");
+      return;
+    }
+  };
+
+  // Password Validation with Regex
+  const passwordValidation = (event) => {
+    const password = event.target.value;
+
+    if (password.length > 0) {
+      if (password.length < 6) {
+        setErr("Your password should be at least 6 character long.");
+        return;
+      } else if (!/(?=.*[!@#$%^&*])/.test(password)) {
+        setErr("Your password should be at least one special character.");
+        return;
+      } else if (!/(?=.*[A-Z])(?=.*[a-z])/.test(password)) {
+        setErr(
+          "Your password should be at least one upper and lower case letter."
+        );
+        return;
+      } else if (!/(?=.*\d)/.test(password)) {
+        setErr("Your password should be at least one digit.");
+        return;
+      } else {
+        setErr("");
+        return;
+      }
+    } else {
+      setErr("");
+      return;
+    }
+  };
+
   // Login with email password
   const submitLoginHandler = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
-
-    // Validation with Regex
-    if (password.length < 6) {
-      setErr("Your password should be at least 6 character long.");
-      return;
-    }
-    if (!/(?=.*[!@#$%^&*])/.test(password)) {
-      setErr("Your password should be at least one special character.");
-      return;
-    } else if (!/(?=.*[A-Z])(?=.*[a-z])/.test(password)) {
-      setErr(
-        "Your password should be at least one upper and lower case letter."
-      );
-      return;
-    } else if (!/(?=.*\d)/.test(password)) {
-      setErr("Your password should be at least one digit.");
-      return;
-    }
 
     signIn(email, password)
       .then((userCredential) => {
@@ -232,6 +265,7 @@ const Login = () => {
                 </label>
                 <input
                   ref={emailRef}
+                  onChange={emailValidation}
                   type="email"
                   name="email"
                   id="email"
@@ -250,6 +284,7 @@ const Login = () => {
                 <div className="bg-gray-50 flex border border-gray-300 rounded-lg">
                   <input
                     type={isVisible ? "text" : "password"}
+                    onChange={passwordValidation}
                     name="password"
                     id="password"
                     placeholder="••••••••"

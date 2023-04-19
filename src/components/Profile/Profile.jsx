@@ -5,11 +5,15 @@ import { toast } from "react-hot-toast";
 const Profile = () => {
   // Use context api
   const { user, updateAuthData, profileUpdate } = useContext(AuthContext);
+
+  // State
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
+  const [name, setName] = useState(user?.displayName);
+  const [photoUrl, setPhotoUrl] = useState(user?.photoURL);
 
-  // Update profile data
-  const handleModal = (event) => {
+  // Submit updated profile data
+  const submitUpdatedData = (event) => {
     event.preventDefault();
     setIsBtnLoading(true);
     const updateName = event.target.name.value;
@@ -29,6 +33,13 @@ const Profile = () => {
       });
   };
 
+  // Edit profile data
+  const editProfileData = () => {
+    setName(user?.displayName);
+    setPhotoUrl(user?.photoURL);
+    setModalIsOpen(true);
+  };
+
   return (
     <div className="flex justify-center items-center mt-8">
       <div className="card card-compact w-96 bg-base-100 shadow rounded-md">
@@ -41,10 +52,7 @@ const Profile = () => {
           <p>{user?.email}</p>
           <div className="card-actions justify-end">
             {/* The button to open modal */}
-            <button
-              onClick={() => setModalIsOpen(true)}
-              className="btn btn-xs text-white"
-            >
+            <button onClick={editProfileData} className="btn btn-xs text-white">
               Edit profile
             </button>
           </div>
@@ -65,12 +73,14 @@ const Profile = () => {
             >
               ✕
             </button>
-            <form onSubmit={handleModal} className="card-body">
+            <form onSubmit={submitUpdatedData} className="card-body">
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Name</span>
                 </label>
                 <input
+                  value={name}
+                  onChange={() => setName(event.target.value)}
                   name="name"
                   type="text"
                   className="input input-bordered"
@@ -81,6 +91,8 @@ const Profile = () => {
                   <span className="label-text">Photo URL</span>
                 </label>
                 <input
+                  value={photoUrl}
+                  onChange={() => setPhotoUrl(event.target.value)}
                   name="photoUrl"
                   type="text"
                   className="input input-bordered"
