@@ -46,6 +46,7 @@ const Register = () => {
         const user = userCredential.user;
 
         navigate("/", { replace: true });
+        setLoading(false);
 
         // Send verification email
         sendVerificationEmail(user).then(() => {
@@ -71,6 +72,7 @@ const Register = () => {
         const errForMsg = errorMessage.split(":");
         setErr(errForMsg[1]);
         console.log(`Error Message: ${errorMessage}`);
+        setLoading(false);
       });
   };
 

@@ -64,6 +64,7 @@ const Login = () => {
         const user = userCredential.user;
         console.log(user);
         navigate(from, { replace: true });
+        setLoading(false);
       })
       .catch((error) => {
         const errorMessage = error.message;
