@@ -37,6 +37,20 @@ const AuthProviders = ({ children }) => {
     return sendEmailVerification(user);
   };
 
+  // Update user data in firebase from user reg
+  const userUpdate = (name, photo) => {
+    setLoading(true);
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    });
+  };
+
+  // Update profile data in local state from user reg
+  const updateAuthData = (email, name, photo) => {
+    setUser({ ...user, email: email, displayName: name, photoURL: photo });
+  };
+
   // Update profile data in firebase
   const profileUpdate = (updateName, updatePhoto) => {
     return updateProfile(auth.currentUser, {
@@ -45,8 +59,8 @@ const AuthProviders = ({ children }) => {
     });
   };
 
-  // Update profile data in local state
-  const updateAuthData = (updateName, updatePhoto) => {
+  // Update profile data in local state from profile edit
+  const updateProfileData = (updateName, updatePhoto) => {
     setUser({ ...user, displayName: updateName, photoURL: updatePhoto });
   };
 
@@ -106,11 +120,13 @@ const AuthProviders = ({ children }) => {
     user,
     setUser,
     updateAuthData,
+    updateProfileData,
     loading,
     setLoading,
     createUser,
     sendVerificationEmail,
     profileUpdate,
+    userUpdate,
     signIn,
     googleSignIn,
     githubSignIn,

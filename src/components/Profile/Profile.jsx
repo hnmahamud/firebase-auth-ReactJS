@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 
 const Profile = () => {
   // Use context api
-  const { user, updateAuthData, profileUpdate } = useContext(AuthContext);
+  const { user, updateProfileData, profileUpdate } = useContext(AuthContext);
 
   // State
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -22,7 +22,7 @@ const Profile = () => {
     profileUpdate(updateName, updatePhoto)
       .then(() => {
         toast.success("Profile update Successfully!");
-        updateAuthData(updateName, updatePhoto);
+        updateProfileData(updateName, updatePhoto);
         setModalIsOpen(false);
         setIsBtnLoading(false);
       })

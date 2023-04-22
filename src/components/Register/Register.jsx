@@ -3,11 +3,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { AuthContext } from "../../providers/AuthProviders";
+// Blank user image
+const photo =
+  "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=740&t=st=1682183923~exp=1682184523~hmac=7b363a7e2f6de1b8296fe22ea6eaceb24356ca04809ff110b92ad504d0c651d3";
 
 const Register = () => {
   // Use context api
-  const { createUser, sendVerificationEmail, profileUpdate, setLoading } =
-    useContext(AuthContext);
+  const {
+    createUser,
+    sendVerificationEmail,
+    userUpdate,
+    setLoading,
+    updateAuthData,
+  } = useContext(AuthContext);
 
   // Use location and navigate for get the pathname where user wanted to go.
   const navigate = useNavigate();
@@ -83,10 +91,12 @@ const Register = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        console.log(user);
 
         // Update user profile
-        profileUpdate(name, null)
+        userUpdate(name, photo)
           .then(() => {
+            updateAuthData(email, name, photo);
             // Navigate to our destination
             navigate(from, { replace: true });
             setLoading(false);
